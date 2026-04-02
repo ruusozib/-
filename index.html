@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#2f2a25" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Brand Lens" />
+    <title>Brand Lens | ブランドバッグ認識</title>
+    <meta
+      name="description"
+      content="カメラまたは画像アップロードでブランドバッグ情報を検索できる Brand Lens。"
+    />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="container">
+      <header class="hero app-header">
+        <p class="badge">Production v1</p>
+        <h1>Brand Lens for Bags</h1>
+        <p class="subtitle">
+          カメラまたは画像アップロードでバッグを解析し、ブランド候補・モデル情報・参考価格を表示します。
+        </p>
+      </header>
+
+      <section class="scanner-card">
+        <p class="section-lead">STEP 1：撮影方法を選択</p>
+        <div class="video-wrap">
+          <video id="camera" autoplay playsinline muted></video>
+          <canvas id="snapshot" hidden></canvas>
+          <div id="scanOverlay" class="scan-overlay">バッグ全体を枠内に合わせてください</div>
+          <div id="scanLine" class="scan-line hidden"></div>
+        </div>
+
+        <div class="actions" aria-label="撮影方法">
+          <button id="startCameraBtn" class="btn secondary">カメラを開始</button>
+          <button id="stopCameraBtn" class="btn ghost" disabled>カメラ停止</button>
+          <button id="scanBtn" class="btn primary" disabled>スキャンする</button>
+          <label class="upload-label btn light" for="imageUpload">画像を選択</label>
+          <input id="imageUpload" type="file" accept="image/*" />
+        </div>
+
+        <p id="statusText" class="status status-info">待機中: カメラを開始するか、画像を選択してください。</p>
+        <ul class="mini-guide">
+          <li>カメラ利用時：バッグ全体が枠内に入るように合わせる</li>
+          <li>アップロード時：明るく、正面から撮影した画像を推奨</li>
+        </ul>
+      </section>
+
+      <section id="resultCard" class="result-card hidden" aria-live="polite">
+        <div id="analyzingPanel" class="analyzing hidden" aria-live="assertive">
+          <span class="spinner" aria-hidden="true"></span>
+          <p>判定中です… 画像特徴を解析しています</p>
+        </div>
+
+        <div class="result-header">
+          <h2>STEP 2：判定結果</h2>
+          <span id="latencyChip" class="chip">処理時間: -- ms</span>
+        </div>
+
+        <div class="result-body">
+          <figure class="preview-panel">
+            <img id="resultImage" alt="解析対象画像" />
+            <figcaption>撮影（アップロード）画像プレビュー</figcaption>
+          </figure>
+
+          <div class="result-grid">
+            <div><span>ブランド</span><strong id="brand"></strong></div>
+            <div><span>モデル</span><strong id="model"></strong></div>
+            <div><span>カテゴリ</span><strong id="category"></strong></div>
+            <div><span>推定価格帯</span><strong id="price"></strong></div>
+            <div><span>推定素材</span><strong id="material"></strong></div>
+            <div><span>一致率</span><strong id="confidence"></strong></div>
+          </div>
+        </div>
+
+        <details class="candidates">
+          <summary>候補ブランド（上位3件）</summary>
+          <ol id="candidateList"></ol>
+        </details>
+
+        <aside class="notice" role="note" aria-label="重要な注意事項">
+          <strong>重要:</strong>
+          この結果はAIによる参考推定です。最終的な真贋判定・正式査定には専門鑑定または公式査定サービスをご利用ください。
+        </aside>
+      </section>
+
+      <section class="history-card">
+        <div class="result-header">
+          <h2>スキャン履歴</h2>
+          <button id="clearHistoryBtn" class="btn ghost">履歴を削除</button>
+        </div>
+        <ul id="historyList" class="history-list"></ul>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>

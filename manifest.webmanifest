@@ -1,0 +1,11 @@
+{
+  "name": "Brand Lens for Bags",
+  "short_name": "Brand Lens",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f4f1",
+  "theme_color": "#2f2a25",
+  "lang": "ja"
+}
