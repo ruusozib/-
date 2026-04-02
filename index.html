@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Brand Lens | ブランドバッグ認識</title>
+    <meta
+      name="description"
+      content="カメラまたは画像アップロードでブランドバッグ情報を検索できる Brand Lens。"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="container">
+      <header class="hero">
+        <p class="badge">Production v1</p>
+        <h1>Brand Lens for Bags</h1>
+        <p class="subtitle">
+          カメラまたは画像アップロードでバッグを解析し、ブランド候補・モデル情報・参考価格を表示します。
+        </p>
+      </header>
+
+      <section class="scanner-card">
+        <div class="video-wrap">
+          <video id="camera" autoplay playsinline muted></video>
+          <canvas id="snapshot" hidden></canvas>
+          <div id="scanOverlay" class="scan-overlay">ALIGN BAG INSIDE FRAME</div>
+          <div id="scanLine" class="scan-line hidden"></div>
+        </div>
+
+        <div class="actions">
+          <button id="startCameraBtn" class="btn secondary">カメラを開始</button>
+          <button id="stopCameraBtn" class="btn ghost" disabled>カメラ停止</button>
+          <button id="scanBtn" class="btn primary" disabled>スキャンする</button>
+          <label class="upload-label btn light" for="imageUpload">画像を選択</label>
+          <input id="imageUpload" type="file" accept="image/*" />
+        </div>
+
+        <p id="statusText" class="status">待機中: カメラを開始するか、画像を選択してください。</p>
+      </section>
+
+      <section id="resultCard" class="result-card hidden" aria-live="polite">
+        <div class="result-header">
+          <h2>認識結果</h2>
+          <span id="latencyChip" class="chip">処理時間: -- ms</span>
+        </div>
+
+        <div class="result-body">
+          <img id="resultImage" alt="解析対象画像" />
+
+          <div class="result-grid">
+            <div><span>ブランド</span><strong id="brand"></strong></div>
+            <div><span>モデル</span><strong id="model"></strong></div>
+            <div><span>カテゴリ</span><strong id="category"></strong></div>
+            <div><span>推定価格帯</span><strong id="price"></strong></div>
+            <div><span>推定素材</span><strong id="material"></strong></div>
+            <div><span>一致率</span><strong id="confidence"></strong></div>
+          </div>
+        </div>
+
+        <details class="candidates">
+          <summary>候補一覧（上位3件）</summary>
+          <ol id="candidateList"></ol>
+        </details>
+
+        <p class="note">
+          本ページはクライアント側で動作する簡易推定版です。商用運用時はサーバー側推論と真贋判定APIの併用を推奨します。
+        </p>
+      </section>
+
+      <section class="history-card">
+        <div class="result-header">
+          <h2>スキャン履歴</h2>
+          <button id="clearHistoryBtn" class="btn ghost">履歴を削除</button>
+        </div>
+        <ul id="historyList" class="history-list"></ul>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
