@@ -24,7 +24,6 @@ const fields = {
 
 const HISTORY_KEY = "brand_lens_history_v1";
 
-// 製品版向けのローカル特徴ベース推定データ
 const bagCatalog = [
   {
     brand: "CHANEL",
@@ -146,7 +145,6 @@ function extractFeatureSignature(imageData) {
   const variance = Math.max(brightnessSqSum / pixelCount - avgBrightness * avgBrightness, 0);
   const contrast = Math.min(Math.sqrt(variance) / 128, 1);
 
-  // 軽量エッジ推定（横方向差分）
   for (let y = 0; y < height; y += 2) {
     for (let x = 1; x < width; x += 2) {
       const idx = (y * width + x) * 4;
@@ -322,6 +320,20 @@ function scanFromUpload(file) {
   setStatus(`アップロード画像を解析中… (${file.name})`);
 }
 
+function registerServiceWorker() {
+  if (!("serviceWorker" in navigator) || !window.isSecureContext) {
+    return;
+  }
+
+  window.addEventListener("load", async () => {
+    try {
+      await navigator.serviceWorker.register("./sw.js");
+    } catch (error) {
+      console.warn("Service Worker の登録に失敗しました", error);
+    }
+  });
+}
+
 startCameraBtn.addEventListener("click", startCamera);
 stopCameraBtn.addEventListener("click", stopCamera);
 scanBtn.addEventListener("click", scanFromCamera);
@@ -338,3 +350,4 @@ clearHistoryBtn.addEventListener("click", () => {
 });
 
 renderHistory();
+registerServiceWorker();
